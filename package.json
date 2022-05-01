@@ -1,6 +1,10 @@
 {
   "name": "root",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dkonasov/dap-js.git"
+  },
   "devDependencies": {
     "lerna": "^4.0.0"
   }

@@ -7,6 +7,10 @@
     "protocol",
     "server"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dkonasov/dap-js.git"
+  },
   "author": "Konasov Dmitriy <d.konasov@yandex.ru>",
   "homepage": "",
   "license": "MIT",
