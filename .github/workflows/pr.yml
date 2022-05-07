@@ -1,7 +1,7 @@
 name: pr
 on:
   pull_request:
-    types: [opened, reopened]
+    types: [opened, reopened, synchronize]
 jobs:
   tests:
     runs-on: ubuntu-latest
@@ -10,5 +10,5 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
-      - run: npm i
+      - run: npx lerna bootstrap
       - run: npx lerna run test
