@@ -17,7 +17,7 @@ jobs:
       - name: bootstrap
         run: npx lerna bootstrap
       - name: build
-        run: npx lerna build
+        run: npx lerna run build
       - name: version
         run: npx lerna version -y --conventional-commits
       - name: publish
