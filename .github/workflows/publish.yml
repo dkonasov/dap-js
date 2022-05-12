@@ -26,8 +26,10 @@ jobs:
         run: npx lerna version -y --conventional-commits
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: publish
-        run: npx lerna publish from-package -y --no-verify-access
+      - name: add npmrc
+        run: echo //registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN} > .npmrc
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: publish
+        run: npx lerna publish from-package -y --no-verify-access
 
