@@ -1,0 +1,27 @@
+name: publish
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - master
+jobs:
+  publish:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - name: bootstrap
+        run: npx lerna bootstrap
+      - name: build
+        run: npx lerna build
+      - name: version
+        run: npx lerna version -y --conventional-commits
+      - name: publish
+        run: npx lerna publish from-package -y
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
