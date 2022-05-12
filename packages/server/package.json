@@ -1,6 +1,6 @@
 {
   "name": "@dap-js/server",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Server implementation for DAP protocol",
   "keywords": [
     "network",
