@@ -1,11 +1,4 @@
 {
-  "compilerOptions": {
-    "module": "commonjs",
-    "target": "es2015",
-    "outDir": "lib",
-    "declaration": true,
-    "declarationDir": "typings",
-    "sourceMap": true
-  },
+  "extends": "./tsconfig.base.json",
   "include": ["src/**/*"]
 }
