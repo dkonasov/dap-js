@@ -7,5 +7,5 @@
     "declarationDir": "typings",
     "sourceMap": true
   },
-  "include": ["src/**/*", "tests/**/*"]
+  "include": ["src/**/*"]
 }
