@@ -25,7 +25,7 @@ jobs:
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor}}@users.noreply.github.com"
       - name: version
-        run: npx lerna version -y --conventional-commits --include-merged-tags
+        run: npx lerna version -y --conventional-commits --include-merged-tags --ignore-changes **/__tests__/**
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: add npmrc
