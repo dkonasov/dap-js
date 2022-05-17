@@ -1,52 +1,8 @@
-import { createConnection } from "net";
 import { DapRequest } from "../../src/DapRequest";
 import { DapServer } from "../../src/DapServer";
 import { mergeRight } from "ramda";
 import { DapResponse } from "../../src/DapResponse";
-
-// TODO: Replace this dummy client with actual client from lib
-
-interface DapServerResponse {
-  resultCode: number;
-  payload?: Buffer;
-}
-
-// eslint-disable-next-line require-jsdoc
-function sendData(
-  procedureId: number,
-  payload?: Buffer,
-  token?: Buffer
-): Promise<DapServerResponse> {
-  const tokenBuffer = token ?? Buffer.alloc(0);
-  const payloadBuffer = payload ?? Buffer.alloc(0);
-
-  const bufferLength = 3 + tokenBuffer.length + payloadBuffer.length;
-  const request = Buffer.alloc(bufferLength);
-  request.writeUInt16BE(tokenBuffer.length);
-  tokenBuffer.copy(request, 2);
-  request.writeUint8(procedureId, 2 + tokenBuffer.length);
-  payloadBuffer.copy(request, 3 + tokenBuffer.length);
-
-  return new Promise((resolve) => {
-    const client = createConnection({ port: 3000 }, () => {
-      client.write(request);
-      client.end();
-      let result = [];
-      client.on("data", (buf) => {
-        result = result.concat(Array.from(buf));
-      });
-      client.on("end", () => {
-        const resultBuffer = Buffer.from(result);
-        const resultCode = resultBuffer.readUInt8();
-        const payload = resultBuffer.subarray(1);
-        resolve({
-          payload,
-          resultCode,
-        });
-      });
-    });
-  });
-}
+import { sendData } from "@dap-js/client";
 
 let server: DapServer;
 const validRequest: DapRequest = {
@@ -60,7 +16,7 @@ describe("DapServer", () => {
     const spy = jest.fn((_, res: DapResponse) => res.sendStatus(0));
     server = new DapServer(spy);
     await server.listen(3000);
-    await sendData(0);
+    await sendData('dap://localhost:3000', { procedureId: 0});
     expect(spy).toHaveBeenCalled();
   });
 
@@ -68,7 +24,7 @@ describe("DapServer", () => {
     const spy = jest.fn((_, res: DapResponse) => res.sendStatus(0));
     server = new DapServer(spy);
     await server.listen(3000);
-    await sendData(42);
+    await sendData('dap://localhost:3000', { procedureId: 42});
     expect(spy.mock.calls[0][0]).toEqual(
       mergeRight<DapRequest, Partial<DapRequest>>(validRequest, {
         procedureId: 42,
@@ -80,7 +36,7 @@ describe("DapServer", () => {
     const spy = jest.fn((_, res: DapResponse) => res.sendStatus(0));
     server = new DapServer(spy);
     await server.listen(3000);
-    await sendData(0, Buffer.from("Hello, world!"));
+    await sendData('dap://localhost:3000', {procedureId: 0, payload: Buffer.from("Hello, world!")});
 
     expect(spy.mock.calls[0][0]).toEqual(
       mergeRight<DapRequest, Partial<DapRequest>>(validRequest, {
@@ -93,7 +49,7 @@ describe("DapServer", () => {
     const spy = jest.fn((_, res: DapResponse) => res.sendStatus(0));
     server = new DapServer(spy);
     await server.listen(3000);
-    await sendData(0, Buffer.alloc(1));
+    await sendData('dap://localhost:3000', {procedureId: 0, payload: Buffer.alloc(1)});
 
     expect(spy.mock.calls[0][0]).toEqual(
       mergeRight<DapRequest, Partial<DapRequest>>(validRequest, {
@@ -106,7 +62,7 @@ describe("DapServer", () => {
     const spy = jest.fn((_, res: DapResponse) => res.sendStatus(0));
     server = new DapServer(spy);
     await server.listen(3000);
-    await sendData(0, undefined, Buffer.from([2, 12, 85, 6]));
+    await sendData('dap://localhost:3000', {procedureId: 0, token: Buffer.from([2, 12, 85, 6])});
 
     expect(spy.mock.calls[0][0]).toEqual(
       mergeRight<DapRequest, Partial<DapRequest>>(validRequest, {
@@ -121,7 +77,7 @@ describe("DapServer", () => {
     });
 
     await server.listen(3000);
-    const result = await sendData(0);
+    const result = await sendData('dap://localhost:3000', { procedureId: 0});
     expect(result.resultCode).toBe(0);
     expect(result.payload).toEqual(Buffer.from([2, 12, 85, 6]));
   });
