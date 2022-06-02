@@ -25,6 +25,17 @@ describe("sendData", () => {
     expect(result).toEqual({resultCode: 0, payload: Buffer.from("Hello, world!")} as LocalDapResponse);
   });
 
+  it("should return response if handler is async", async () => {
+    server = new DapServer(async (_, res: DapResponse) => {
+      await Promise.resolve();
+      res.send(0, Buffer.from("Hello, world!"));
+    });
+    await server.listen(1312);
+    const result = await sendData('dap://localhost:1312', { payload: Buffer.from('Hello, world!'), procedureId: 42});
+
+    expect(result).toEqual({resultCode: 0, payload: Buffer.from("Hello, world!")} as LocalDapResponse);
+  });
+
   afterEach(async() => {
       await server.stop();
   });

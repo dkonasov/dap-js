@@ -13,7 +13,7 @@ export class DapServer {
    * @param {DapRequestHandler} handler handler for incoming request
    */
   constructor(handler: DapRequestHandler) {
-    this.#tcpServer = createServer((c) => {
+    this.#tcpServer = createServer({allowHalfOpen: true}, (c) => {
       let result: number[] = [];
       c.on("data", (buffer) => {
         result = result.concat(Array.from(buffer));
