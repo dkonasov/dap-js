@@ -20,9 +20,10 @@ export function sendData(url: string, request: DapRequest): Promise<DapResponse>
     const parsedUrl = new URL(url);
 
     return new Promise((resolve) => {
-        const client = createConnection({port: Number(parsedUrl.port) || 1312}, () => {
-            client.write(requestBuffer);
-            client.end();
+        const client = createConnection({port: Number(parsedUrl.port) || 1312, allowHalfOpen: true}, () => {
+            client.write(requestBuffer, () => {
+                client.end();
+            });
             let result = [];
             client.on('data', (buf) => {
                 result = result.concat(Array.from(buf));

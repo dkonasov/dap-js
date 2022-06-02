@@ -81,4 +81,15 @@ describe("DapServer", () => {
     expect(result.resultCode).toBe(0);
     expect(result.payload).toEqual(Buffer.from([2, 12, 85, 6]));
   });
+
+  it("should send response with async handler", async () => {
+    server = new DapServer(async(_, res) => {
+      res.send(0, Buffer.from([2, 12, 85, 6]));
+    });
+
+    await server.listen(3000);
+    const result = await sendData('dap://localhost:3000', { procedureId: 0});
+    expect(result.resultCode).toBe(0);
+    expect(result.payload).toEqual(Buffer.from([2, 12, 85, 6]));
+  });
 });
