@@ -1,6 +1,6 @@
 {
   "name": "@dap-js/server",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Server implementation for DAP protocol",
   "keywords": [
     "network",
@@ -31,7 +31,7 @@
     "format": "npx prettier --write ."
   },
   "devDependencies": {
-    "@dap-js/client": "^1.0.3",
+    "@dap-js/client": "^1.0.4",
     "@types/jest": "^27.4.1",
     "@types/node": "^17.0.29",
     "@types/ramda": "^0.28.11",
