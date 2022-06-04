@@ -1,6 +1,6 @@
 {
   "name": "@dap-js/nest-adapter",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "NestJS adapter for DAP protocol",
   "author": "Konasov Dmitriy <d.konasov@yandex.ru>",
   "homepage": "https://github.com/dkonasov/dap-js",
@@ -53,7 +53,7 @@
     "@dap-js/server": "^1.0.9"
   },
   "peerDependencies": {
-    "@nestjs/microservices": "^8.4.5",
-    "@nestjs/core": "^8.4.5"
+    "@nestjs/core": "^8.4.5",
+    "@nestjs/microservices": "^8.4.5"
   }
 }
